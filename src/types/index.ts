@@ -1,15 +1,22 @@
-export interface WeatherData {
+export interface  WeatherData {
+  temperature: number;
+  description: string;
+  humidity: number;
+  windSpeed: number;
+  icon: string;
+  city: string;
   name: string;
-  main: {
-    temp: number;
-    feels_like: number;
-    humidity: number;
-  };
+  // 添加原始天气数据结构
   weather: Array<{
     main: string;
     description: string;
     icon: string;
   }>;
+  main: {
+    temp: number;
+    humidity: number;
+    feels_like: number;
+  };
   wind: {
     speed: number;
   };

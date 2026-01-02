@@ -11,6 +11,7 @@ export interface WeatherData {
   windSpeed: number;
   icon: string;
   city: string;
+  name: string;
   // 添加原始天气数据结构
   weather: Array<{
     main: string;
@@ -20,6 +21,7 @@ export interface WeatherData {
   main: {
     temp: number;
     humidity: number;
+    feels_like: number;
   };
   wind: {
     speed: number;
@@ -40,6 +42,7 @@ export async function getWeatherData(): Promise<WeatherData | null> {
         windSpeed: 3.5,
         icon: '☀️',
         city: '沈阳',
+        name: 'A',
         weather: [{
           main: 'Clear',
           description: '晴天',
@@ -47,7 +50,8 @@ export async function getWeatherData(): Promise<WeatherData | null> {
         }],
         main: {
           temp: 22,
-          humidity: 60
+          humidity: 60,
+           feels_like: 24,
         },
         wind: {
           speed: 3.5
@@ -72,6 +76,7 @@ export async function getWeatherData(): Promise<WeatherData | null> {
       windSpeed: data.wind.speed,
       icon: getWeatherIcon(data.weather[0].main),
       city: '沈阳',
+      name :'A',
       // 保留原始数据结构
       weather: data.weather,
       main: data.main,
