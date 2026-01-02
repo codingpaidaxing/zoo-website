@@ -1,11 +1,9 @@
-import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+export function cn(...inputs: (string | undefined | null | false)[]): string {
+  return twMerge(inputs.filter(Boolean).join(' '))
 }
 
-// 定义天气数据类型
 export interface WeatherData {
   temperature: number;
   description: string;
@@ -13,23 +11,47 @@ export interface WeatherData {
   windSpeed: number;
   icon: string;
   city: string;
+  // 添加原始天气数据结构
+  weather: Array<{
+    main: string;
+    description: string;
+    icon: string;
+  }>;
+  main: {
+    temp: number;
+    humidity: number;
+  };
+  wind: {
+    speed: number;
+  };
 }
 
 export async function getWeatherData(): Promise<WeatherData | null> {
   try {
-    // 使用免费的天气API
     const API_KEY = process.env.NEXT_PUBLIC_WEATHER_API_KEY || 'demo_key';
     const city = 'Shenyang';
     
-    // 如果是demo_key，返回模拟数据
     if (API_KEY === 'demo_key') {
+      // 返回符合真实API结构的模拟数据
       return {
         temperature: 22,
         description: '晴天',
         humidity: 60,
         windSpeed: 3.5,
         icon: '☀️',
-        city: '沈阳'
+        city: '沈阳',
+        weather: [{
+          main: 'Clear',
+          description: '晴天',
+          icon: '01d'
+        }],
+        main: {
+          temp: 22,
+          humidity: 60
+        },
+        wind: {
+          speed: 3.5
+        }
       };
     }
 
@@ -49,7 +71,11 @@ export async function getWeatherData(): Promise<WeatherData | null> {
       humidity: data.main.humidity,
       windSpeed: data.wind.speed,
       icon: getWeatherIcon(data.weather[0].main),
-      city: '沈阳'
+      city: '沈阳',
+      // 保留原始数据结构
+      weather: data.weather,
+      main: data.main,
+      wind: data.wind
     };
   } catch (error) {
     console.error('Error fetching weather data:', error);
